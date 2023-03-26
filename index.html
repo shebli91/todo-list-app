@@ -15,12 +15,11 @@
       href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.3.0/css/all.min.css"
     />
     <link rel="stylesheet" href="style.css" />
-    <script src="app.js"></script>
     <title>TODO App</title>
   </head>
   <body>
     <div class="task-placeholder-container">
-      <label for="task">Task</label>
+      <label for="task-placeholder">Task</label>
       <input
         type="text"
         id="task-placeholder"
@@ -31,7 +30,9 @@
 
     <div class="assignee-top-container">
       <div>
-        <label for="task" class="assignee-label">Assignee</label>
+        <label for="assignee-placeholder" class="assignee-label"
+          >Assignee</label
+        >
         <input
           type="text"
           id="assignee-placeholder"
@@ -53,14 +54,13 @@
       <i class="fa-solid fa-xmark clear-search"></i>
     </div>
 
-    <div class="task-main-container">
+    <ul class="task-list-container"></ul>
+
+    <!-- <div class="task-main-container">
       <div class="task-container">
         <div>
           <h1 class="task-label-text">Task :</h1>
           <p class="task-text">task text</p>
-        </div>
-        <div class="delete-btn">
-          <i class="fa-solid fa-trash-can"></i>
         </div>
       </div>
 
@@ -69,15 +69,26 @@
           <h1 class="assignee-label-text">Assignee :</h1>
           <p class="assignee-text">assignee text</p>
         </div>
-        <div class="check-btn">
-          <i class="fa-solid fa-circle-check"></i>
-        </div>
+        <div class="check-and-delete-btns">
+      <div class="check-btn">
+        <i class="fa-solid fa-circle-check"></i>
+      </div>
+      <div class="delete-btn">
+        <i class="fa-solid fa-trash-can"></i>
       </div>
     </div>
+      </div>
+    </div> -->
 
     <div class="statistics">
-      <p class="Done">Done :</p>
-      <p class="todo">ToDo :</p>
+      <div class="todo">
+        ToDo :
+        <p class="todo-counter"></p>
+      </div>
+      <div class="Done">
+        Done :
+        <p class="done-counter"></p>
+      </div>
     </div>
 
     <div class="popup-box" hidden>
@@ -92,5 +103,6 @@
         </div>
       </div>
     </div>
+    <script src="app.js"></script>
   </body>
 </html>
