@@ -19,49 +19,78 @@
     <title>TODO App</title>
   </head>
   <body>
-    <div class="task-label">
+    <div class="task-placeholder-container">
       <label for="task">Task</label>
       <input
         type="text"
         id="task-placeholder"
+        class="task-placeholder"
         placeholder="Write your task here"
       />
     </div>
-    <div class="assignee-label">
-      <label for="task">Assignee</label>
-      <input
-        type="text"
-        id="task-placeholder"
-        placeholder="Write the assignee Name "
-      />
-      <button class="btn add-btn">Add</button>
-      <button class="btn switch-btn">Switch view</button>
-    </div>
 
-    <div class="search-bar">
-      <i class="fa-solid fa-magnifying-glass"></i>
-      <input type="search" placeholder="Search" />
-    </div>
-
-    <div class="task-container">
+    <div class="assignee-top-container">
       <div>
-        <h1 class="task-text">Task</h1>
-        <button class="delete-btn">
+        <label for="task" class="assignee-label">Assignee</label>
+        <input
+          type="text"
+          id="assignee-placeholder"
+          class="assignee-placeholder"
+          placeholder="Write the assignee Name "
+        />
+      </div>
+      <div class="main-btns">
+        <button class="btn add-btn">Add</button>
+        <button class="btn switch-btn">Switch View</button>
+      </div>
+    </div>
+
+    <div class="search-bar-container">
+      <div class="right-content">
+        <i class="fa-solid fa-magnifying-glass"></i>
+        <input type="search" class="search-bar" placeholder="Search" />
+      </div>
+      <i class="fa-solid fa-xmark clear-search"></i>
+    </div>
+
+    <div class="task-main-container">
+      <div class="task-container">
+        <div>
+          <h1 class="task-label-text">Task :</h1>
+          <p class="task-text">task text</p>
+        </div>
+        <div class="delete-btn">
           <i class="fa-solid fa-trash-can"></i>
-        </button>
+        </div>
       </div>
 
-      <div>
-        <h1 class="assignee-text">Assignee</h1>
-        <button class="check-btn">
+      <div class="assignee-container">
+        <div>
+          <h1 class="assignee-label-text">Assignee :</h1>
+          <p class="assignee-text">assignee text</p>
+        </div>
+        <div class="check-btn">
           <i class="fa-solid fa-circle-check"></i>
-        </button>
+        </div>
       </div>
     </div>
 
     <div class="statistics">
-      <p class="todo">ToDo:</p>
-      <p class="Done">Done:</p>
+      <p class="Done">Done :</p>
+      <p class="todo">ToDo :</p>
+    </div>
+
+    <div class="popup-box" hidden>
+      <div class="popup-content">
+        <div class="popup-header">
+          <h2>Are You Sure - Delete This Task ?</h2>
+        </div>
+
+        <div class="popup-footer">
+          <button class="cancel-btn">Cancel</button>
+          <button class="ok-btn">OK</button>
+        </div>
+      </div>
     </div>
   </body>
 </html>
