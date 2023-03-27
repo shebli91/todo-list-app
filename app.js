@@ -10,7 +10,6 @@ const addBtn = document.querySelector('.add-btn');
 const switchBtn = document.querySelector('.switch-btn');
 
 const searchInput = document.querySelector('.search-bar');
-const searchBtn = document.querySelector('.fa-magnifying-glass');
 const clearSearchBtn = document.querySelector('.clear-search');
 
 const tasksListContainer = document.querySelector('.task-list-container');
@@ -32,7 +31,7 @@ let counter = 0;
 
 //////////////////////  Render Function  Section //////////////////////
 
-const renderData = function () {
+const renderData = function (data) {
   // Clear the current tasks
   tasksListContainer.innerHTML = '';
 
@@ -54,10 +53,10 @@ const renderData = function () {
       </div>
       <div class="check-and-delete-btns">
       <div class="check-btn">
-        <i class="fa-solid fa-circle-check"></i>
+        <i class="fa-solid fa-circle-check task-icon"></i>
       </div>
       <div class="delete-btn">
-        <i class="fa-solid fa-trash-can"></i>
+        <i class="fa-solid fa-trash-can task-icon"></i>
       </div>
     </div>
   </div>`;
@@ -84,7 +83,7 @@ const addTask = function () {
 
     // Render the Data array to the DOM
 
-    renderData();
+    renderData(data);
 
     // Clear the input fields
     taskInput.value = '';
@@ -99,11 +98,11 @@ const addTask = function () {
   }
 };
 
-////////////////////// add task on button  click //////////////////////
+////////////////////// add task on button  click ////////////////////
 
 addBtn.addEventListener('click', addTask);
 
-////////////////////// add task on enter key press  //////////////////////
+////////////////////// add task on enter key press  ///////////////////
 
 taskInput.addEventListener('keypress', function (event) {
   if (event.keyCode === 13) {
@@ -115,4 +114,46 @@ assigneeInput.addEventListener('keypress', function (event) {
   if (event.keyCode === 13) {
     addTask();
   }
+});
+
+/////////////////////////// Search bar section  //////////////////////////////////
+
+//////// creating the  Clear functionality of the x mark button  ////////////
+
+// Add an event listener to the search bar to show/hide the x mark icon
+searchInput.addEventListener('input', () => {
+  if (searchInput.value !== '') {
+    clearSearchBtn.style.display = 'block';
+  } else {
+    clearSearchBtn.style.display = 'none';
+  }
+});
+
+clearSearchBtn.addEventListener('click', function () {
+  // Clear the inout value
+  searchInput.value = '';
+
+  // Render the full tasks
+  renderData(data);
+
+  // Hide the X button
+  clearSearchBtn.style.display = 'none';
+});
+
+////////////////// creating the Search mechanism ////////////////////////
+
+searchInput.addEventListener('keyup', function (event) {
+  // Get the search value
+  const searchValue = event.target.value.toLowerCase();
+
+  // filter the tasks array based on the search value
+  const filteredData = data.filter(function (taskObj) {
+    return (
+      taskObj.name.toLowerCase().includes(searchValue) ||
+      taskObj.assignee.toLowerCase().includes(searchValue)
+    );
+  });
+
+  // Render the filtered data to the DOM
+  renderData(filteredData);
 });

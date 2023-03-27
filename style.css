@@ -147,6 +147,14 @@ button:hover {
   color: white;
 }
 
+.icon:hover {
+  color: #0b60aa;
+}
+
+.task-icon:hover {
+  color: #fff;
+}
+
 .main-btns {
   padding-left: 1em;
   margin-left: 0.3em;
@@ -167,6 +175,7 @@ button:hover {
   padding-right: 0.5em;
   font-size: 2em;
   cursor: pointer;
+  display: none;
 }
 
 .search-bar-container {
@@ -202,12 +211,19 @@ button:hover {
 /* ////////////// task section ////////////// */
 
 .task-main-container {
-  border: 3px solid #58aff1;
+  border: 2px solid #58aff1;
   padding: 0.5em 0 0 0.5em;
   margin-bottom: 2em;
   display: flex;
   flex-direction: column;
   height: 100%;
+  border-radius: 10px;
+  box-shadow: 0 6px 8px rgba(0, 0, 0, 0.2);
+}
+
+.task-main-container:hover {
+  background-color: #0b60aa;
+  color: #f5f5f5;
 }
 
 /* ////////////// Some styling for the tasks scroll bar ////////////// */
@@ -234,7 +250,7 @@ button:hover {
 .task-list-container::-webkit-scrollbar-thumb:hover {
   background-color: #1e8ae8;
 }
-/* ////////////// Some styling for the tasks scroll bar ////////////// */
+/* ////////////// //////////////// ////////////// */
 
 .task-container {
   display: flex;
