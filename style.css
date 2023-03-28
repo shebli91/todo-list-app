@@ -327,7 +327,7 @@ button:hover {
 
 .statistics {
   display: flex;
-  justify-content: end;
+  justify-content: flex-end;
   margin-right: 4em;
   color: #58aff1;
   font-weight: bold;
@@ -341,10 +341,14 @@ button:hover {
   display: flex;
 }
 
+.done:hover {
+  cursor: pointer;
+  color: #0b60aa;
+}
+
 .todo-counter,
 .done-counter {
   margin-left: 1em;
-  display: inline;
 }
 
 /* ////////////// deletion confirmation pop-up section ////////////// */
