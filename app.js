@@ -2,6 +2,8 @@
 
 ////////////////////// Selectors Section //////////////////////
 
+const pageContainer = document.querySelector('.page-container');
+
 const taskInput = document.querySelector('.task-placeholder');
 
 const assigneeInput = document.querySelector('.assignee-placeholder');
@@ -28,9 +30,53 @@ const popupCancelBtn = document.querySelector('.cancel-btn');
 const popupOkBtn = document.querySelector('.ok-btn');
 
 let data = [];
-let todoCounter = 0;
-let doneCounter = 0;
+let todoCounter;
+let doneCounter;
 let doneTasksArray = [];
+
+////////// Main functions /////////
+
+function showPopup() {
+  // Show the popup box
+  popupConfirmationBox.removeAttribute('hidden');
+
+  // Add the popup overlay to the page container
+  const overlay = document.createElement('div');
+  overlay.classList.add('popup-overlay');
+  pageContainer.appendChild(overlay);
+
+  // Disable scrolling on the body
+  pageContainer.style.overflow = 'hidden';
+}
+
+function hidePopup() {
+  // Hide the popup box
+  popupConfirmationBox.setAttribute('hidden', '');
+
+  // Remove the popup overlay from the page container
+  const overlay = document.querySelector('.popup-overlay');
+  if (overlay) {
+    pageContainer.removeChild(overlay);
+  }
+  // Enable scrolling on the body
+  pageContainer.style.overflow = 'auto';
+}
+
+function updateTaskCounter() {
+  todoCounter = 0;
+  doneCounter = 0;
+
+  data.forEach(() => {
+    todoCounter++;
+  });
+
+  doneTasksArray.forEach(() => {
+    doneCounter++;
+  });
+
+  todoTasksEl.textContent = todoCounter;
+  doneTasksEl.textContent = doneCounter;
+}
 
 //////////////////////  Render Function  Section //////////////////////
 
@@ -92,9 +138,8 @@ const addTask = function () {
     taskInput.value = '';
     assigneeInput.value = '';
 
-    // Update the ToDo statistics todoC
-    todoCounter++;
-    todoTasksEl.textContent = todoCounter;
+    // Update the ToDo statistics
+    updateTaskCounter();
   } else {
     alert('Please fill in both task and assignee fields.');
   }
@@ -106,14 +151,11 @@ addBtn.addEventListener('click', addTask);
 
 ////////////////////// add task on enter key press  ///////////////////
 
-taskInput.addEventListener('keypress', function (event) {
-  if (event.keyCode === 13) {
-    addTask();
-  }
-});
-
-assigneeInput.addEventListener('keypress', function (event) {
-  if (event.keyCode === 13) {
+document.addEventListener('keydown', function (event) {
+  if (
+    event.key === 'Enter' &&
+    (event.target === taskInput || event.target === assigneeInput)
+  ) {
     addTask();
   }
 });
@@ -169,24 +211,37 @@ tasksListContainer.addEventListener('click', event => {
   if (clickedElement.classList.contains('fa-trash-can')) {
     // Find the closest task element and remove it from the DOM
     const taskElement = clickedElement.closest('.task-main-container');
-    taskElement.remove();
 
-    // Remove the task from the task data array
-    const taskName = taskElement.querySelector('.task-text').textContent;
-    const taskIndex = data.findIndex(task => task.name === taskName);
-    if (taskIndex !== -1) {
-      data.splice(taskIndex, 1);
-    }
+    // Show the confirmation popup
+    showPopup();
 
-    todoCounter--;
-    todoTasksEl.textContent = todoCounter;
+    // Add event listener to cancel button
+    popupCancelBtn.addEventListener('click', () => {
+      hidePopup();
+    });
+
+    // Add event listener to ok button
+    popupOkBtn.addEventListener('click', function () {
+      // Remove the task element from the DOM if the deletion has been confirmed
+      taskElement.remove();
+
+      // Remove the task from the task data array
+      const taskName = taskElement.querySelector('.task-text').textContent;
+      const taskIndex = data.findIndex(task => task.name === taskName);
+      if (taskIndex !== -1) {
+        data.splice(taskIndex, 1);
+      }
+      // Hide the confirmation popup
+      hidePopup();
+
+      updateTaskCounter();
+    });
   }
 
   // Check if the clicked element is the check icon
   if (clickedElement.classList.contains('fa-circle-check')) {
     // Find the closest task element and move it to the done task container
     const taskElement = clickedElement.closest('.task-main-container');
-
     taskElement.remove();
 
     // Remove the task from the task data array and add it to the done tasks array
@@ -196,10 +251,7 @@ tasksListContainer.addEventListener('click', event => {
       const doneTask = data.splice(taskIndex, 1)[0];
       doneTasksArray.push(doneTask);
     }
-    todoCounter--;
-    todoTasksEl.textContent = todoCounter;
-    doneCounter++;
-    doneTasksEl.textContent = doneCounter;
+    updateTaskCounter();
   }
 
   /////////////////////////////// in line edit functionality //////////////////
@@ -223,28 +275,25 @@ tasksListContainer.addEventListener('click', event => {
     inputElement.addEventListener('keydown', event => {
       // If the "Enter" key or "Escape" key is pressed
       if (event.key === 'Enter' || event.key === 'Escape') {
-        // Get the new text value from the input element
-        const newText = inputElement.value;
-        // Find the index of the task in the data array using the clicked element
-        const taskIndex = findTaskIndex(clickedElement);
-        // Call the "updateTaskText" function with the new text, index, and clicked element
-        updateTaskText(taskIndex, newText, clickedElement);
-        // Re-render the task list with the updated data
-        renderData(data);
+        editHandler(inputElement);
       }
     });
 
     // Listen for the "blur" event on the input element
     inputElement.addEventListener('blur', () => {
-      // Get the new text value from the input element
-      const newText = inputElement.value;
-      // Find the index of the task in the data array using the input element
-      const taskIndex = findTaskIndex(inputElement);
-      // Call the "updateTaskText" function with the new text, index, and clicked element
-      updateTaskText(taskIndex, newText, clickedElement);
-      // Re-render the task list with the updated data
-      renderData(data);
+      editHandler(inputElement);
     });
+  }
+
+  function editHandler(inputElement) {
+    // Get the new text value from the input element
+    const newText = inputElement.value;
+    // Find the index of the task in the data array using the input element
+    const taskIndex = findTaskIndex(inputElement);
+    // Call the "updateTaskText" function with the new text, index, and clicked element
+    updateTaskText(taskIndex, newText, clickedElement);
+    // Re-render the task list with the updated data
+    renderData(data);
   }
 
   // Function to find the index of the task in the data array using the clicked element

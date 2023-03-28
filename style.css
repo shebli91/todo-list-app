@@ -228,12 +228,12 @@ button:hover {
 
 /* ////////////// Some styling for the tasks scroll bar and the the task transition ////////////// */
 .task-list-container {
-  overflow: auto;
+  /* overflow: auto; */
   flex: 1;
   margin-top: 1em;
 }
 
-.task-list-container::-webkit-scrollbar {
+/* .task-list-container::-webkit-scrollbar {
   width: 12px;
 }
 
@@ -249,7 +249,7 @@ button:hover {
 
 .task-list-container::-webkit-scrollbar-thumb:hover {
   background-color: #1e8ae8;
-}
+} */
 
 /* ////////////// //////////////// ////////////// */
 
@@ -384,4 +384,43 @@ button:hover {
   padding: 0.2em 0;
   margin-left: 2em;
   width: 4.7em;
+}
+
+/* //////////////// */
+
+/* Page container */
+.page-container {
+  position: relative;
+  overflow: auto;
+  flex: 1;
+  margin-top: 1em;
+}
+
+.page-container::-webkit-scrollbar {
+  width: 12px;
+}
+
+.page-container::-webkit-scrollbar-track {
+  background-color: #f5f5f5;
+}
+
+.page-container::-webkit-scrollbar-thumb {
+  background-color: #58aff1;
+  border-radius: 10px;
+  border: 3px solid #f5f5f5;
+}
+
+.page-container::-webkit-scrollbar-thumb:hover {
+  background-color: #1e8ae8;
+}
+
+/* Apply opacity to page container */
+.popup-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.3); /* adjust opacity value as needed */
+  z-index: 10; /* make sure this is lower than the popup box */
 }
