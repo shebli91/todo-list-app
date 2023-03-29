@@ -18,48 +18,48 @@
     <title>TODO App</title>
   </head>
   <body>
-    <div class="page-container">
-      <div class="task-placeholder-container">
-        <label for="task-placeholder">Task</label>
+    <div class="task-placeholder-container">
+      <label for="task-placeholder">Task</label>
+      <input
+        type="text"
+        id="task-placeholder"
+        class="task-placeholder"
+        placeholder="Write your task here"
+      />
+    </div>
+
+    <div class="assignee-top-container">
+      <div>
+        <label for="assignee-placeholder" class="assignee-label"
+          >Assignee</label
+        >
         <input
           type="text"
-          id="task-placeholder"
-          class="task-placeholder"
-          placeholder="Write your task here"
+          id="assignee-placeholder"
+          class="assignee-placeholder"
+          placeholder="Write the assignee Name "
         />
       </div>
-
-      <div class="assignee-top-container">
-        <div>
-          <label for="assignee-placeholder" class="assignee-label"
-            >Assignee</label
-          >
-          <input
-            type="text"
-            id="assignee-placeholder"
-            class="assignee-placeholder"
-            placeholder="Write the assignee Name "
-          />
-        </div>
-        <div class="main-btns">
-          <button class="btn add-btn">Add</button>
-          <button class="btn switch-btn">Switch View</button>
-        </div>
+      <div class="main-btns">
+        <button class="btn add-btn">Add</button>
+        <button class="btn switch-btn">Switch View</button>
       </div>
+    </div>
 
-      <div class="search-bar-container">
-        <div class="right-content">
-          <i class="fa-solid fa-magnifying-glass icon"></i>
-          <input type="search" class="search-bar" placeholder="Search" />
-        </div>
-        <i class="fa-solid fa-xmark clear-search icon"></i>
+    <div class="search-bar-container">
+      <div class="right-content">
+        <i class="fa-solid fa-magnifying-glass icon"></i>
+        <input type="search" class="search-bar" placeholder="Search" />
       </div>
+      <i class="fa-solid fa-xmark clear-search icon"></i>
+    </div>
 
+    <div class="page-container">
       <ul class="task-list-container">
         <!-- <div class="task-main-container">
-        <div class="task-container">
-          <div>
-            <h1 class="task-label-text">Task :</h1>
+          <div class="task-container">
+            <div>
+              <h1 class="task-label-text">Task :</h1>
         <p class="task-text">${task.name}</p>
       </div>
     </div>
