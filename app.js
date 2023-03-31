@@ -24,14 +24,20 @@ const checkTaskBtn = document.querySelector('.check-btn');
 
 const todoTasksEl = document.querySelector('.todo-counter');
 const doneTasksEl = document.querySelector('.done-counter');
+const donePopupBtn = document.querySelector('.done');
 
-const popupConfirmationBox = document.querySelector('.popup-box');
+const popupConfirmationBox = document.querySelector('.delete-box');
 const popupCancelBtn = document.querySelector('.cancel-btn');
 const popupOkBtn = document.querySelector('.ok-btn');
 
-const prevBtn = document.querySelector('.prev-btn');
-const nextBtn = document.querySelector('.next-btn');
-const tasks = document.querySelectorAll('.task-list-container li');
+const doneTaskBox = document.querySelector('.done-task-box');
+const doneTasksContainer = document.querySelector('.done-tasks');
+const redoTaskBtn = document.querySelector('.redo-task');
+const closeButton = doneTaskBox.querySelector('.popup-close-btn');
+
+// const prevBtn = document.querySelector('.prev-btn');
+// const nextBtn = document.querySelector('.next-btn');
+// const tasks = document.querySelectorAll('.task-list-container li');
 
 let data = [];
 let todoCounter;
@@ -72,18 +78,19 @@ const updateUI = function (data) {
         <p class="task-text editable">${task.name}</p>
       </div>
     </div>
-
+    
     <div class="assignee-container">
       <div>
         <h1 class="assignee-label-text">Assignee :</h1>
         <p class="assignee-text editable">${task.assignee}</p>
       </div>
       <div class="check-and-delete-btns">
-      <div class="check-btn">
-        <i class="fa-solid fa-circle-check task-icon"></i>
-      </div>
-      <div class="delete-btn">
-        <i class="fa-solid fa-trash-can task-icon"></i>
+        <div class="check-btn">
+          <i class="fa-solid fa-circle-check task-icon"></i>
+        </div>
+        <div class="delete-btn">
+          <i class="fa-solid fa-trash-can task-icon"></i>
+        </div>
       </div>
     </div>
   </div>`;
@@ -105,6 +112,7 @@ if (storedData) {
 
 if (storedDoneTasksArray) {
   doneTasksArray = JSON.parse(storedDoneTasksArray);
+  updateTaskCounter();
 }
 
 updateUI(data);
@@ -126,9 +134,9 @@ clearBtn.addEventListener('click', () => {
 
 ////////// Main functions /////////
 
-function showPopup() {
+function showPopup(popupBox) {
   // Show the popup box
-  popupConfirmationBox.removeAttribute('hidden');
+  popupBox.removeAttribute('hidden');
 
   // Add the popup overlay to the page container
   const overlay = document.createElement('div');
@@ -139,9 +147,9 @@ function showPopup() {
   pageContainer.style.overflow = 'hidden';
 }
 
-function hidePopup() {
+function hidePopup(popupBox) {
   // Hide the popup box
-  popupConfirmationBox.setAttribute('hidden', '');
+  popupBox.setAttribute('hidden', '');
 
   // Remove the popup overlay from the page container
   const overlay = document.querySelector('.popup-overlay');
@@ -249,11 +257,11 @@ tasksListContainer.addEventListener('click', event => {
     const taskElement = clickedElement.closest('.task-main-container');
 
     // Show the confirmation popup
-    showPopup();
+    showPopup(popupConfirmationBox);
 
     // Add event listener to cancel button
     popupCancelBtn.addEventListener('click', () => {
-      hidePopup();
+      hidePopup(popupConfirmationBox);
     });
 
     // Add event listener to ok button
@@ -269,7 +277,7 @@ tasksListContainer.addEventListener('click', event => {
         updateLocalStorage(data, doneTasksArray);
       }
       // Hide the confirmation popup
-      hidePopup();
+      hidePopup(popupConfirmationBox);
 
       updateTaskCounter();
     });
@@ -377,6 +385,98 @@ tasksListContainer.addEventListener('click', event => {
       }
     }
   }
+});
+
+/////////// Done Tasks pop up /////////////
+
+function renderDoneTasks() {
+  doneTasksContainer.innerHTML = '';
+
+  doneTasksArray.forEach(task => {
+    const taskContainer = document.createElement('li');
+    taskContainer.innerHTML = `
+      <div class="task-main-container">
+        <div class="task-container">
+          <div>
+            <h1 class="task-label-text">Task :</h1>
+            <p class="task-text editable">${task.name}</p>
+          </div>
+        </div>
+
+        <div class="assignee-container">
+          <div>
+            <h1 class="assignee-label-text">Assignee :</h1>
+            <p class="assignee-text editable">${task.assignee}</p>
+          </div>
+          <div class="redo-task-button">
+            <button class="btn redo-task">Redo Task</button>
+          </div>
+        </div>
+      </div>
+    `;
+    doneTasksContainer.appendChild(taskContainer);
+  });
+}
+
+function redoTask(taskIndex) {
+  // Move task from doneTaskArray to data array
+  const task = doneTasksArray.splice(taskIndex, 1)[0];
+  data.push(task);
+
+  // Update localStorage
+  localStorage.setItem('tasks', JSON.stringify(data));
+
+  // Render tasks and done tasks
+  renderData();
+  renderDoneTasks();
+}
+
+donePopupBtn.addEventListener('click', function () {
+  if (doneTasksArray.length === 0) {
+    alert('No done tasks to show.');
+    return;
+  }
+  // Show the done tasks popup
+  showPopup(doneTaskBox);
+
+  // Render the done tasks in the popup
+  renderDoneTasks();
+
+  // Handle redo button click using event delegation
+  doneTaskBox.addEventListener('click', function (event) {
+    const clickedElement = event.target;
+
+    if (clickedElement.classList.contains('redo-task')) {
+      const taskElement = clickedElement.closest('.task-main-container');
+
+      taskElement.remove();
+
+      // Remove the task from the task data array and add it to the done tasks array
+      const taskName = taskElement.querySelector('.task-text').textContent;
+      const taskIndex = doneTasksArray.findIndex(
+        task => task.name === taskName
+      );
+      if (taskIndex !== -1) {
+        const doneTask = doneTasksArray.splice(taskIndex, 1)[0];
+        data.push(doneTask);
+
+        // Update the local storage data
+        updateLocalStorage(data, doneTasksArray);
+        // Check if there are no more done tasks and close the popup if true
+        if (doneTasksArray.length === 0) {
+          hidePopup(doneTaskBox);
+        }
+      }
+      // re-render tasks
+      updateUI(data);
+      renderDoneTasks();
+    }
+  });
+
+  // Add event listener for the close button
+  closeButton.addEventListener('click', function () {
+    hidePopup(doneTaskBox);
+  });
 });
 
 /////////// horizontal view  functionality ////////////

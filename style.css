@@ -365,6 +365,27 @@ button:hover {
   margin-left: 1em;
 }
 
+.redo-task {
+  display: flex;
+  margin-left: auto;
+  margin-right: 2em;
+  font-size: 2em;
+}
+
+.done-task-box {
+  position: relative;
+  overflow: auto;
+  flex: 1;
+  margin-top: 1em;
+  max-width: 40em;
+}
+
+.done-task {
+  /* overflow: auto; */
+  flex: 1;
+  margin-top: 1em;
+}
+
 /* ////////////// deletion confirmation pop-up section ////////////// */
 .popup-box {
   position: fixed;

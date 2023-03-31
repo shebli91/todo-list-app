@@ -103,7 +103,7 @@
       </div>
     </div>
 
-    <div class="popup-box" hidden>
+    <div class="popup-box delete-box" hidden>
       <div class="popup-content">
         <div class="popup-header">
           <h2>Are You Sure - Delete This Task ?</h2>
@@ -114,6 +114,30 @@
           <button class="ok-btn">OK</button>
         </div>
       </div>
+    </div>
+
+    <div class="popup-box done-task-box" hidden>
+      <button class="popup-close-btn">X</button>
+      <ul class="done-tasks">
+        <!-- <div class="task-main-container">
+          <div class="task-container">
+            <div>
+              <h1 class="task-label-text">Task :</h1>
+              <p class="task-text editable">${task.name}</p>
+            </div>
+          </div>
+
+          <div class="assignee-container">
+            <div>
+              <h1 class="assignee-label-text">Assignee :</h1>
+              <p class="assignee-text editable">${task.assignee}</p>
+            </div>
+            <div class="redo-task-button">
+              <button class="btn redo-task">Redo Task</button>
+            </div>
+          </div>
+        </div> -->
+      </ul>
     </div>
     <script src="app.js"></script>
   </body>
