@@ -98,6 +98,14 @@ const updateLocalStorage = function (data, doneTasksArray) {
   localStorage.setItem('doneTasks', JSON.stringify(doneTasksArray));
 };
 
+//////// Clear the whole locale storage of the app ///////////
+const clearBtn = document.querySelector('.clear-btn');
+clearBtn.addEventListener('click', () => {
+  localStorage.clear();
+  // Reload the page to reflect the cleared localStorage
+  window.location.reload();
+});
+
 ////////// Main functions /////////
 
 function showPopup() {
