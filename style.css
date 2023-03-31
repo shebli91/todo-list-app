@@ -92,12 +92,12 @@ body {
   border: 3px solid #58aff1;
   box-shadow: 5px 0px #58aff1;
   position: absolute;
-  left: 20%;
-  right: 20%;
-  max-width: 60%;
+  left: 10%;
+  right: 10%;
+  max-width: 80%;
   display: flex;
   flex-direction: column;
-  justify-content: start;
+  /* justify-content: start; */
 }
 
 /* ////////////// top section ////////////// */
@@ -421,6 +421,74 @@ button:hover {
   left: 0;
   width: 100%;
   height: 100%;
-  background-color: rgba(0, 0, 0, 0.3); /* adjust opacity value as needed */
-  z-index: 10; /* make sure this is lower than the popup box */
+  background-color: rgba(0, 0, 0, 0.3);
+  z-index: 10;
+}
+
+/* /////// horizontal view styles ////////// */
+
+/* .horizontal-view .task-list-container {
+  display: flex;
+  overflow-x: hidden;
+  width: 100%;
+  height: 30vh;
+}
+
+.show-one-task li:not(:first-child) {
+  display: none;
+}
+
+.horizontal-view .navigation-btns {
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+}
+
+.horizontal-view .navigation-btns button {
+  font-size: 2.2rem;
+  font-weight: bold;
+  color: #58aff1;
+}
+
+.horizontal-view .navigation-btns button:hover {
+  background-color: transparent;
+  color: #0b60aa;
+} */
+
+@media (max-width: 839px) {
+  .task-placeholder-container {
+    display: flex;
+    flex-wrap: wrap;
+  }
+
+  .assignee-top-container {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+  }
+
+  .assignee-top-container div {
+    width: 100%;
+    margin-bottom: 10px;
+  }
+
+  .main-btns {
+    width: 100%;
+  }
+}
+
+@media (max-width: 520px) {
+  .statistics {
+    display: flex;
+    flex-direction: column;
+  }
+  .todo,
+  .done {
+    display: flex;
+    flex-direction: row;
+  }
+  .todo-counter,
+  .done-counter {
+    white-space: nowrap;
+  }
 }
