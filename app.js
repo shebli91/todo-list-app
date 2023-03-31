@@ -40,9 +40,25 @@ let doneTasksArray = [];
 
 let currentTaskIndex = 0;
 
-//////////////////////  Render Function  Section //////////////////////
+//////////////////////  Render Functions  Section //////////////////////
 
-const renderData = function (data) {
+function updateTaskCounter() {
+  todoCounter = 0;
+  doneCounter = 0;
+
+  data.forEach(() => {
+    todoCounter++;
+  });
+
+  doneTasksArray.forEach(() => {
+    doneCounter++;
+  });
+
+  todoTasksEl.textContent = todoCounter;
+  doneTasksEl.textContent = doneCounter;
+}
+
+const updateUI = function (data) {
   // Clear the current tasks
   tasksListContainer.innerHTML = '';
 
@@ -74,6 +90,8 @@ const renderData = function (data) {
 
     // Append the element to the (ul) Parent
     tasksListContainer.appendChild(taskItem);
+
+    updateTaskCounter();
   });
 };
 
@@ -83,13 +101,13 @@ const storedDoneTasksArray = localStorage.getItem('doneTasks');
 
 if (storedData) {
   data = JSON.parse(storedData);
-  renderData(data);
 }
 
 if (storedDoneTasksArray) {
   doneTasksArray = JSON.parse(storedDoneTasksArray);
-  updateTaskCounter();
 }
+
+updateUI(data);
 
 ///// Set the data to the localeStorage ////////////
 
@@ -134,28 +152,12 @@ function hidePopup() {
   pageContainer.style.overflow = 'auto';
 }
 
-function updateTaskCounter() {
-  todoCounter = 0;
-  doneCounter = 0;
-
-  data.forEach(() => {
-    todoCounter++;
-  });
-
-  doneTasksArray.forEach(() => {
-    doneCounter++;
-  });
-
-  todoTasksEl.textContent = todoCounter;
-  doneTasksEl.textContent = doneCounter;
-}
-
 //////////////////////  function to add task //////////////////////
 const addTask = function () {
   // Check that task and assignee are not empty
   // if true Create an object with the task and assignee inputs values
 
-  if (taskInput.value && assigneeInput.value) {
+  if (taskInput.value.trim() && assigneeInput.value.trim()) {
     const taskObj = {
       name: taskInput.value,
       assignee: assigneeInput.value,
@@ -169,14 +171,11 @@ const addTask = function () {
     updateLocalStorage(data, doneTasksArray);
 
     // Render the Data array to the DOM
-    renderData(data);
+    updateUI(data);
 
     // Clear the input fields
     taskInput.value = '';
     assigneeInput.value = '';
-
-    // Update the ToDo statistics
-    updateTaskCounter();
   } else {
     alert('Please fill in both task and assignee fields.');
   }
@@ -215,7 +214,7 @@ clearSearchBtn.addEventListener('click', function () {
   searchInput.value = '';
 
   // Render the full tasks
-  renderData(data);
+  updateUI(data);
 
   // Hide the X button
   clearSearchBtn.style.display = 'none';
@@ -236,7 +235,7 @@ searchInput.addEventListener('keyup', function (event) {
   });
 
   // Render the filtered data to the DOM
-  renderData(filteredData);
+  updateUI(filteredData);
 });
 
 ////////// creating the tasks controlling  mechanism  ( using event Delegation) /////////////
@@ -331,13 +330,22 @@ tasksListContainer.addEventListener('click', event => {
 
   function editHandler(inputElement) {
     // Get the new text value from the input element
-    const newText = inputElement.value;
+    const newText = inputElement.value.trim();
+
+    if (newText === '') {
+      // Display an error message to the user
+      alert('Please enter a valid text!');
+      // Replace the input element with the original text element
+      inputElement.replaceWith(clickedElement);
+      return;
+    }
+
     // Find the index of the task in the data array using the input element
     const taskIndex = findTaskIndex(inputElement);
     // Call the "updateTaskText" function with the new text, index, and clicked element
     updateTaskText(taskIndex, newText, clickedElement);
     // Re-render the task list with the updated data
-    renderData(data);
+    updateUI(data);
     // Update the local storage
     updateLocalStorage(data, doneTasksArray);
 
