@@ -53,14 +53,14 @@ const renderData = function (data) {
     <div class="task-container">
       <div>
         <h1 class="task-label-text">Task :</h1>
-        <p class="task-text">${task.name}</p>
+        <p class="task-text editable">${task.name}</p>
       </div>
     </div>
 
     <div class="assignee-container">
       <div>
         <h1 class="assignee-label-text">Assignee :</h1>
-        <p class="assignee-text">${task.assignee}</p>
+        <p class="assignee-text editable">${task.assignee}</p>
       </div>
       <div class="check-and-delete-btns">
       <div class="check-btn">
@@ -308,6 +308,9 @@ tasksListContainer.addEventListener('click', event => {
     const inputElement = document.createElement('input');
     inputElement.value = originalText;
 
+    // Add the 'inline-input' class to the input element
+    inputElement.classList.add('inline-input');
+
     // Replace the clicked element with the input element and focus on it
     clickedElement.replaceWith(inputElement);
     inputElement.focus();
@@ -337,6 +340,9 @@ tasksListContainer.addEventListener('click', event => {
     renderData(data);
     // Update the local storage
     updateLocalStorage(data, doneTasksArray);
+
+    // Remove the 'inline-input' class from the input element
+    inputElement.classList.remove('inline-input');
   }
 
   // Function to find the index of the task in the data array using the clicked element

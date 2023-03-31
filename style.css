@@ -323,6 +323,20 @@ button:hover {
   margin-right: 2em;
 }
 
+.editable {
+  cursor: pointer;
+}
+
+.inline-input {
+  background-color: inherit;
+  color: inherit;
+  border: none;
+  outline: none;
+  padding-top: 7px;
+  font-size: 1.6em;
+  display: block;
+  width: 100%;
+}
 /* ////////////// statistics section ////////////// */
 
 .statistics {
