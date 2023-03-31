@@ -29,10 +29,74 @@ const popupConfirmationBox = document.querySelector('.popup-box');
 const popupCancelBtn = document.querySelector('.cancel-btn');
 const popupOkBtn = document.querySelector('.ok-btn');
 
+const prevBtn = document.querySelector('.prev-btn');
+const nextBtn = document.querySelector('.next-btn');
+const tasks = document.querySelectorAll('.task-list-container li');
+
 let data = [];
 let todoCounter;
 let doneCounter;
 let doneTasksArray = [];
+
+let currentTaskIndex = 0;
+
+//////////////////////  Render Function  Section //////////////////////
+
+const renderData = function (data) {
+  // Clear the current tasks
+  tasksListContainer.innerHTML = '';
+
+  // Loop through the tasks array and create li element for each one
+  data.forEach(task => {
+    const taskItem = document.createElement('li');
+    taskItem.innerHTML = `<div class="task-main-container">
+    <div class="task-container">
+      <div>
+        <h1 class="task-label-text">Task :</h1>
+        <p class="task-text">${task.name}</p>
+      </div>
+    </div>
+
+    <div class="assignee-container">
+      <div>
+        <h1 class="assignee-label-text">Assignee :</h1>
+        <p class="assignee-text">${task.assignee}</p>
+      </div>
+      <div class="check-and-delete-btns">
+      <div class="check-btn">
+        <i class="fa-solid fa-circle-check task-icon"></i>
+      </div>
+      <div class="delete-btn">
+        <i class="fa-solid fa-trash-can task-icon"></i>
+      </div>
+    </div>
+  </div>`;
+
+    // Append the element to the (ul) Parent
+    tasksListContainer.appendChild(taskItem);
+  });
+};
+
+//////////////// get the data from the locale storage ////////
+const storedData = localStorage.getItem('tasks');
+const storedDoneTasksArray = localStorage.getItem('doneTasks');
+
+if (storedData) {
+  data = JSON.parse(storedData);
+  renderData(data);
+}
+
+if (storedDoneTasksArray) {
+  doneTasksArray = JSON.parse(storedDoneTasksArray);
+  updateTaskCounter();
+}
+
+///// Set the data to the localeStorage ////////////
+
+const updateLocalStorage = function (data, doneTasksArray) {
+  localStorage.setItem('tasks', JSON.stringify(data));
+  localStorage.setItem('doneTasks', JSON.stringify(doneTasksArray));
+};
 
 ////////// Main functions /////////
 
@@ -78,43 +142,6 @@ function updateTaskCounter() {
   doneTasksEl.textContent = doneCounter;
 }
 
-//////////////////////  Render Function  Section //////////////////////
-
-const renderData = function (data) {
-  // Clear the current tasks
-  tasksListContainer.innerHTML = '';
-
-  // Loop through the tasks array and create li element for each one
-  data.forEach(task => {
-    const taskItem = document.createElement('li');
-    taskItem.innerHTML = `<div class="task-main-container">
-    <div class="task-container">
-      <div>
-        <h1 class="task-label-text">Task :</h1>
-        <p class="task-text">${task.name}</p>
-      </div>
-    </div>
-
-    <div class="assignee-container">
-      <div>
-        <h1 class="assignee-label-text">Assignee :</h1>
-        <p class="assignee-text">${task.assignee}</p>
-      </div>
-      <div class="check-and-delete-btns">
-      <div class="check-btn">
-        <i class="fa-solid fa-circle-check task-icon"></i>
-      </div>
-      <div class="delete-btn">
-        <i class="fa-solid fa-trash-can task-icon"></i>
-      </div>
-    </div>
-  </div>`;
-
-    // Append the element to the (ul) Parent
-    tasksListContainer.appendChild(taskItem);
-  });
-};
-
 //////////////////////  function to add task //////////////////////
 const addTask = function () {
   // Check that task and assignee are not empty
@@ -130,8 +157,10 @@ const addTask = function () {
 
     data.push(taskObj);
 
-    // Render the Data array to the DOM
+    // Save the data array to local storage
+    updateLocalStorage(data, doneTasksArray);
 
+    // Render the Data array to the DOM
     renderData(data);
 
     // Clear the input fields
@@ -230,6 +259,7 @@ tasksListContainer.addEventListener('click', event => {
       const taskIndex = data.findIndex(task => task.name === taskName);
       if (taskIndex !== -1) {
         data.splice(taskIndex, 1);
+        updateLocalStorage(data, doneTasksArray);
       }
       // Hide the confirmation popup
       hidePopup();
@@ -250,6 +280,9 @@ tasksListContainer.addEventListener('click', event => {
     if (taskIndex !== -1) {
       const doneTask = data.splice(taskIndex, 1)[0];
       doneTasksArray.push(doneTask);
+
+      // Update the local storage data
+      updateLocalStorage(data, doneTasksArray);
     }
     updateTaskCounter();
   }
@@ -294,6 +327,8 @@ tasksListContainer.addEventListener('click', event => {
     updateTaskText(taskIndex, newText, clickedElement);
     // Re-render the task list with the updated data
     renderData(data);
+    // Update the local storage
+    updateLocalStorage(data, doneTasksArray);
   }
 
   // Function to find the index of the task in the data array using the clicked element
@@ -321,3 +356,10 @@ tasksListContainer.addEventListener('click', event => {
     }
   }
 });
+
+/////////// horizontal view  functionality ////////////
+
+// switchBtn.addEventListener('click', function () {
+//   pageContainer.classList.toggle('horizontal-view');
+//   tasksListContainer.classList.toggle('show-one-task');
+// });
